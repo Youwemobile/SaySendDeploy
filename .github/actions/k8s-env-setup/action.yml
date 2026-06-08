@@ -1,0 +1,42 @@
+name: 'Kubernetes Environment Setup'
+description: >
+  Prepares Kubernetes environment by configuring kubeconfig and creating Nexus
+  registry secrets
+inputs:
+  kubeconfig_base64:
+    description: 'Base64 encoded kubeconfig data'
+    required: true
+  namespace:
+    description: 'Target namespace for registry secret'
+    required: false
+    default: 'default'
+  nexus_docker_config_base64:
+    description: 'Base64 encoded docker config json'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Configure Kubeconfig
+      shell: bash
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ inputs.kubeconfig_base64 }}" | base64 -d > ~/.kube/config
+        chmod 600 ~/.kube/config
+
+    - name: Create Namespace
+      shell: bash
+      run: |
+        kubectl create namespace ${{ inputs.namespace }} --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Create Registry Secret
+      if: ${{ inputs.nexus_docker_config_base64 != '' }}
+      shell: bash
+      run: |
+        echo -n "${{ inputs.nexus_docker_config_base64 }}" | base64 -d > ./docker-config.json
+        kubectl create secret generic nexus-registry-key \
+          --from-file=.dockerconfigjson=./docker-config.json \
+          --type=kubernetes.io/dockerconfigjson \
+          --namespace=${{ inputs.namespace }} \
+          --dry-run=client -o yaml | kubectl apply -f -
+        rm -f ./docker-config.json

@@ -1,0 +1,41 @@
+name: 'Cleanup Dynamic Environment'
+
+on:
+  repository_dispatch:
+    types: [delete-env]
+
+concurrency:
+  group: deployment-${{ github.event.client_payload.image_tag }}
+  cancel-in-progress: true
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.client_payload.ref_name, 'stage/')
+    env:
+      NAMESPACE: saysend-${{ github.event.client_payload.image_tag }}
+    steps:
+    - name: Checkout infrastructure repo
+      uses: actions/checkout@v4
+
+    - name: Setup Kubernetes Environment
+      uses: ./.github/actions/k8s-env-setup
+      with:
+        kubeconfig_base64: ${{ secrets.KUBECONFIG_DATA_STAGE }}
+        namespace: ${{ env.NAMESPACE }}
+
+    - name: Purge Helm Releases and Namespace
+      run: |
+        NS="${{ env.NAMESPACE }}"
+        helm uninstall app -n ${NS} || true
+        helm uninstall infra -n ${NS} || true
+        kubectl delete namespace ${NS} --wait=true || true
+
+    - name: Delete Remote Git Branch
+      run: |
+        GIT_REF="${{ github.event.client_payload.ref_name }}"
+        git push origin --delete "$GIT_REF" || true
+
+    - name: Cleanup Kubeconfig
+      if: always()
+      uses: ./.github/actions/k8s-cleanup

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fastapi-base.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ include "fastapi-base.name" . }}
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.global }}
+        deploy.date: {{ .Values.global.deployDate | quote }}
+        {{- end }}
+      labels:
+        app: {{ include "fastapi-base.name" . }}
+    spec:
+      imagePullSecrets:
+        - name: nexus-registry-key
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.service.targetPort | default 8000 }}
+          {{- if .Values.env }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+          {{- end }}

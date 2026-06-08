@@ -1,0 +1,9 @@
+name: 'Kubernetes Cleanup'
+description: 'Removes local kubeconfig files'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Purge Kubeconfig
+      shell: bash
+      run: rm -rf ~/.kube

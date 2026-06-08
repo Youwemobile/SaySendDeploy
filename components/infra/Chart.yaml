@@ -1,0 +1,5 @@
+apiVersion: v2
+name: infra
+description: HAProxy Ingress for stage
+type: application
+version: 1.0.0

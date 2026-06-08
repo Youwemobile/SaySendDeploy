@@ -1,0 +1,5 @@
+apiVersion: v2
+name: fastapi-base
+description: Template for microservice with http on 8000
+type: application
+version: 0.1.0

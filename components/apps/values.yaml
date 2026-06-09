@@ -1,9 +1,7 @@
 global:
   deployDate: ""
-
 docs:
   enabled: false
-
 docs-service:
   image:
     repository: swaggerapi/swagger-ui
@@ -16,22 +14,20 @@ docs-service:
     - name: URLS
       value: >-
         [
+
           {"url": "/auth/openapi.json","name":"Auth API"},
           {"url": "/transcription/openapi.json","name": "Transcription API"},
           {"url": "/translation/openapi.json","name": "Translation API"}
         ]
-
 auth-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/auth_service
-    tag: "latest"
-
+    tag: "stage-001"
 transcription-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/transcription_service
-    tag: "latest"
-
+    tag: "stage-001"
 translation-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/translation_service
-    tag: "latest"
+    tag: "stage-001"

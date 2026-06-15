@@ -76,7 +76,7 @@ jobs:
     - name: Setup Kubernetes Environment
       uses: ./.github/actions/k8s-env-setup
       with:
-        kubeconfig_base64: ${{ env.ENV_NAME == 'prod' && secrets.KUBECONFIG_DATA_PROD || secrets.KUBECONFIG_DATA_STAGE }}
+        kubeconfig_base64: ${{ env.ENV_NAME == 'prod' && secrets.PROD_KUBECONFIG_DATA || secrets.STAGE_KUBECONFIG_DATA }}
         namespace: ${{ env.NAMESPACE }}
         nexus_docker_config_base64: ${{ secrets.NEXUS_DOCKER_CONFIG }}
 
@@ -88,6 +88,10 @@ jobs:
           --namespace ${{ env.NAMESPACE }} --create-namespace
 
     - name: Deploy Applications
+      env:
+        ELEVENLABS_API_KEY: ${{ env.ENV_NAME == 'prod' && secrets.PROD_ELEVENLABS_API_KEY || secrets.STAGE_ELEVENLABS_API_KEY }}
+        OPENAI_API_KEY: ${{ env.ENV_NAME == 'prod' && secrets.PROD_OPENAI_API_KEY || secrets.STAGE_OPENAI_API_KEY }}
+        JWT_SECRET_KEY: ${{ env.ENV_NAME == 'prod' && secrets.PROD_JWT_SECRET_KEY || secrets.STAGE_JWT_SECRET_KEY }}
       run: |
         CURRENT_DATE=$(date +%s)
         rm -rf ./components/apps/charts/*
@@ -97,6 +101,9 @@ jobs:
           -f ./components/apps/values.yaml \
           -f ./components/apps/environments/${{ env.ENV_NAME }}.yaml \
           --set "global.deployDate=${CURRENT_DATE}" \
+          --set "global.secrets.ELEVENLABS_API_KEY=${{ env.ELEVENLABS_API_KEY }}" \
+          --set "global.secrets.JWT_SECRET_KEY=${{ env.JWT_SECRET_KEY }}" \
+          --set "global.secrets.OPENAI_API_KEY=${{ env.OPENAI_API_KEY }}" \
           --namespace ${{ env.NAMESPACE }} --create-namespace
 
     - name: Cleanup Kubeconfig

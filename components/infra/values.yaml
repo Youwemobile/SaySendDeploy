@@ -1,5 +1,5 @@
 ingress:
   annotations:
-     kubernetes.io/ingress.class: "haproxy"
-  host: ""
+    kubernetes.io/ingress.class: "haproxy"
+  host: "saysend-stage-001.k8s-dev.saysend.me"
   enableDocs: true

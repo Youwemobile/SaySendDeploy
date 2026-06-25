@@ -22,6 +22,7 @@ docs-service:
 
 
 
+
           {"url": "/auth/openapi.json","name":"Auth API"},
           {"url": "/transcription/openapi.json","name": "Transcription API"},
           {"url": "/translation/openapi.json","name": "Translation API"}

@@ -1,0 +1,40 @@
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: {{ .Release.Name }}-pg
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+spec:
+  teamId: "dev"
+  volume:
+    size: {{ .Values.postgres.volumeSize | default "1Gi" }}
+  numberOfInstances: {{ .Values.postgres.instances | default 1 }}
+  users:
+    saysend:
+    - superuser
+    - createdb
+  preparedDatabases:
+    auth:
+      defaultUsers: true
+  dockerImage: ghcr.io/zalando/spilo-17:4.0-p3
+  postgresql:
+    version: "17"
+  resources:
+    {{- toYaml .Values.postgres.resources | nindent 4 }}
+  patroni:
+    initdb:
+      encoding: "UTF8"
+      locale: "en_US.UTF-8"
+      data-checksums: "true"
+    pg_hba:
+      - hostssl all all 0.0.0.0/0 md5
+      - host    all all 0.0.0.0/0 md5
+      - local   all             all                                   trust
+      - hostssl all             +zalandos    127.0.0.1/32       pam
+      - host    all             all                127.0.0.1/32       md5
+      - hostssl all             +zalandos    ::1/128            pam
+      - host    all             all                ::1/128            md5
+      - hostssl replication     standby all                md5
+      - hostssl all             +zalandos    all                pam
+      - hostssl all             all                all                md5

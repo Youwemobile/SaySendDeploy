@@ -8,3 +8,6 @@ service:
   targetPort: 8000
 
 env: []
+
+migrations:
+  enabled: false

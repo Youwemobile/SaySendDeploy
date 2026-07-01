@@ -25,14 +25,16 @@ docs-service:
 
 auth-service:
   image:
-    repository: docker-registry.lifeulike.net/saysend/auth_service
+    repository: docker-registry.lifeulike.net/saysend/auth
     tag: "latest"
+  migrations:
+    enabled: true
   secrets:
     - JWT_SECRET_KEY
 
 transcription-service:
   image:
-    repository: docker-registry.lifeulike.net/saysend/transcription_service
+    repository: docker-registry.lifeulike.net/saysend/transcription
     tag: "latest"
   secrets:
     - JWT_SECRET_KEY
@@ -41,7 +43,7 @@ transcription-service:
 
 translation-service:
   image:
-    repository: docker-registry.lifeulike.net/saysend/translation_service
+    repository: docker-registry.lifeulike.net/saysend/translation
     tag: "latest"
   secrets:
     - JWT_SECRET_KEY

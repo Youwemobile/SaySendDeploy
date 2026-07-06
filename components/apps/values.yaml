@@ -45,6 +45,8 @@ translation-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/translation
     tag: "latest"
+  migrations:
+    enabled: true
   secrets:
     - JWT_SECRET_KEY
     - OPENAI_API_KEY

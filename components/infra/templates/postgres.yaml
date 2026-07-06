@@ -17,6 +17,8 @@ spec:
   preparedDatabases:
     auth:
       defaultUsers: true
+    translation:
+      defaultUsers: true
   dockerImage: ghcr.io/zalando/spilo-17:4.0-p3
   postgresql:
     version: "17"

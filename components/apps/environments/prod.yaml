@@ -15,3 +15,18 @@ auth-service:
         secretKeyRef:
           name: saysend.prod
           key: db_password
+
+translation-service:
+  env:
+    - name: DB_HOST
+      value: "prod-db-cluster.internal"
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: db_username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: db_password

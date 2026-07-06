@@ -1,10 +1,8 @@
 global:
   deployDate: ""
   secrets: {} # Populated dynamically via CI/CD --set flags
-
 docs:
   enabled: false
-
 docs-service:
   image:
     repository: swaggerapi/swagger-ui
@@ -22,29 +20,26 @@ docs-service:
           {"url": "/transcription/openapi.json","name": "Transcription API"},
           {"url": "/translation/openapi.json","name": "Translation API"}
         ]
-
 auth-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/auth
-    tag: "latest"
+    tag: "stage-002"
   migrations:
     enabled: true
   secrets:
     - JWT_SECRET_KEY
-
 transcription-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/transcription
-    tag: "latest"
+    tag: "stage-002"
   secrets:
     - JWT_SECRET_KEY
     - ELEVENLABS_API_KEY
     - OPENAI_API_KEY
-
 translation-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/translation
-    tag: "latest"
+    tag: "stage-002"
   migrations:
     enabled: true
   secrets:

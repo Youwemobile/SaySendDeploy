@@ -43,12 +43,14 @@ jobs:
     - name: Update Microservices Image Tags
       run: |
         TAG="${{ github.event.client_payload.image_tag }}"
-        TARGET_FILE="./components/apps/values.yaml"
         yq -i "
           .auth-service.image.tag = \"${TAG}\" |
           .transcription-service.image.tag = \"${TAG}\" |
           .translation-service.image.tag = \"${TAG}\"
-        " "${TARGET_FILE}"
+        " ./components/apps/values.yaml
+
+        FULL_SHA="${{ github.event.client_payload.commit_sha }}"
+        echo "SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
 
     - name: Bump Chart and App Versions (Prod Only)
       if: env.ENV_NAME == 'prod'
@@ -61,17 +63,18 @@ jobs:
     - name: Update Stage Dynamic Domain
       if: env.ENV_NAME == 'stage'
       run: |
-        TARGET_FILE="./components/infra/values.yaml"
         TARGET_DOMAIN="${{ env.NAMESPACE }}.k8s-dev.saysend.me"
-        yq -i ".ingress.host = \"${TARGET_DOMAIN}\"" "${TARGET_FILE}"
+        yq -i ".ingress.host = \"${TARGET_DOMAIN}\"" ./components/infra/values.yaml
 
     - name: Commit and Push changes
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "Update configurations for target ${{ env.NAMESPACE }}"
+        commit_message: "Deploy ${{ github.event.client_payload.ref_name }}:${{ env.SHORT_SHA }} to ${{ env.NAMESPACE }}"
         file_pattern: 'components/**/*.yaml'
         branch: ${{ env.TARGET_BRANCH }}
         create_branch: true
+        skip_dirty_check: true
+        commit_options: '--allow-empty'
 
     - name: Setup Kubernetes Environment
       uses: ./.github/actions/k8s-env-setup
@@ -94,8 +97,6 @@ jobs:
         JWT_SECRET_KEY: ${{ env.ENV_NAME == 'prod' && secrets.PROD_JWT_SECRET_KEY || secrets.STAGE_JWT_SECRET_KEY }}
       run: |
         CURRENT_DATE=$(date +%s)
-        rm -rf ./components/apps/charts/*
-        rm -f ./components/apps/Chart.lock
         helm dependency build ./components/apps
         helm upgrade --install app ./components/apps \
           -f ./components/apps/values.yaml \

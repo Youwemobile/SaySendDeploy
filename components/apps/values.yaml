@@ -16,7 +16,7 @@ docs-service:
     - name: BASE_URL
       value: "/docs"
     - name: URLS
-      value: >-
+      value: |-
         [
           {"url": "/auth/openapi.json","name":"Auth API"},
           {"url": "/transcription/openapi.json","name": "Transcription API"},

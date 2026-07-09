@@ -3,6 +3,9 @@ ingress:
      kubernetes.io/ingress.class: "haproxy"
   host: ""
   enableDocs: true
+  bodySize:
+    default: "512k"        # 0.5 MB - general cap for POST/PUT/PATCH endpoints
+    transcription: "1536k" # 1.5 MB - /transcription/v1/transcribe audio upload
 
 postgres:
   volumeSize: 1Gi

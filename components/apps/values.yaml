@@ -20,7 +20,8 @@ docs-service:
         [
           {"url": "/auth/openapi.json","name":"Auth API"},
           {"url": "/transcription/openapi.json","name": "Transcription API"},
-          {"url": "/translation/openapi.json","name": "Translation API"}
+          {"url": "/translation/openapi.json","name": "Translation API"},
+          {"url": "/billing/openapi.json","name": "Billing API"}
         ]
 
 auth-service:
@@ -50,3 +51,12 @@ translation-service:
   secrets:
     - JWT_SECRET_KEY
     - OPENAI_API_KEY
+
+billing-service:
+  image:
+    repository: docker-registry.lifeulike.net/saysend/billing
+    tag: "latest"
+  migrations:
+    enabled: true
+  secrets:
+    - JWT_SECRET_KEY

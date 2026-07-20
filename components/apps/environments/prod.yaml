@@ -15,6 +15,13 @@ auth-service:
         secretKeyRef:
           name: saysend.prod
           key: db_password
+    - name: BILLING_SERVICE_URL
+      value: "http://billing-service"
+
+transcription-service:
+  env:
+    - name: REDIS_HOST
+      value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
 
 translation-service:
   env:
@@ -30,3 +37,26 @@ translation-service:
         secretKeyRef:
           name: saysend.prod
           key: db_password
+    - name: REDIS_HOST
+      value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+
+billing-service:
+  env:
+    - name: DB_HOST
+      value: "prod-db-cluster.internal"
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: db_username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: db_password
+    - name: REDIS_HOST
+      value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+    - name: APPLE_APP_APPLE_ID
+      value: "0" # TODO: real App Store Connect numeric app id
+    - name: APPLE_ENVIRONMENT
+      value: "Production"

@@ -17,3 +17,11 @@ postgres:
     limits:
       cpu: 1000m
       memory: 2000Mi
+
+redis:
+  image: quay.io/opstree/redis:v7.4.8
+  volumeSize: 256Mi
+  resources:
+    requests:
+      cpu: 25m
+      memory: 128Mi

@@ -61,6 +61,28 @@ spec:
                 name: translation-service
                 port:
                   number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: platform-ingress-billing
+  annotations:
+    {{- toYaml $annotations | nindent 4 }}
+    haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
+    haproxy-ingress.github.io/config-backend: |
+      http-request deny deny_status 404 if { path_beg /billing/v1/internal }
+spec:
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /billing
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: 80
 {{- if .Values.ingress.enableDocs }}
 ---
 apiVersion: networking.k8s.io/v1

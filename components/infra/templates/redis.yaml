@@ -1,0 +1,23 @@
+apiVersion: redis.redis.opstreelabs.in/v1beta2
+kind: Redis
+metadata:
+  name: {{ .Release.Name }}-redis
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+spec:
+  podSecurityContext:
+    runAsUser: 1000
+    fsGroup: 1000
+  kubernetesConfig:
+    image: {{ .Values.redis.image }}
+    imagePullPolicy: IfNotPresent
+    resources:
+      {{- toYaml .Values.redis.resources | nindent 6 }}
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.redis.volumeSize | default "1Gi" }}

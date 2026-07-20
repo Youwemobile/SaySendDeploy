@@ -21,6 +21,13 @@ auth-service:
       value: "5432"
     - name: DB_NAME
       value: "auth"
+    - name: BILLING_SERVICE_URL
+      value: "http://billing-service"
+
+transcription-service:
+  env:
+    - name: REDIS_HOST
+      value: "infra-redis"
 
 translation-service:
   env:
@@ -40,3 +47,30 @@ translation-service:
       value: "5432"
     - name: DB_NAME
       value: "translation"
+    - name: REDIS_HOST
+      value: "infra-redis"
+
+billing-service:
+  env:
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: saysend.infra-pg.credentials.postgresql.acid.zalan.do
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.infra-pg.credentials.postgresql.acid.zalan.do
+          key: password
+    - name: DB_HOST
+      value: "infra-pg"
+    - name: DB_PORT
+      value: "5432"
+    - name: DB_NAME
+      value: "billing"
+    - name: REDIS_HOST
+      value: "infra-redis"
+    - name: APPLE_APP_APPLE_ID
+      value: "0" # TODO: real App Store Connect numeric app id
+    - name: APPLE_ENVIRONMENT
+      value: "Sandbox"

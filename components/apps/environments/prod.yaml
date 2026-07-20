@@ -17,11 +17,31 @@ auth-service:
           key: db_password
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: jwt_secret_key
 
 transcription-service:
   env:
     - name: REDIS_HOST
       value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: jwt_secret_key
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: openai_api_key
+    - name: ELEVENLABS_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: elevenlabs_api_key
 
 translation-service:
   env:
@@ -39,6 +59,16 @@ translation-service:
           key: db_password
     - name: REDIS_HOST
       value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: jwt_secret_key
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: openai_api_key
 
 billing-service:
   env:
@@ -60,3 +90,8 @@ billing-service:
       value: "0" # TODO: real App Store Connect numeric app id
     - name: APPLE_ENVIRONMENT
       value: "Production"
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: jwt_secret_key

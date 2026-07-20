@@ -1,6 +1,5 @@
 global:
   deployDate: ""
-  secrets: {} # Populated dynamically via CI/CD --set flags
 
 docs:
   enabled: false
@@ -11,7 +10,6 @@ docs-service:
     tag: "v5.17.14"
   service:
     targetPort: 8080
-  secrets: []
   env:
     - name: BASE_URL
       value: "/docs"
@@ -30,17 +28,11 @@ auth-service:
     tag: "latest"
   migrations:
     enabled: true
-  secrets:
-    - JWT_SECRET_KEY
 
 transcription-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/transcription
     tag: "latest"
-  secrets:
-    - JWT_SECRET_KEY
-    - ELEVENLABS_API_KEY
-    - OPENAI_API_KEY
 
 translation-service:
   image:
@@ -48,9 +40,6 @@ translation-service:
     tag: "latest"
   migrations:
     enabled: true
-  secrets:
-    - JWT_SECRET_KEY
-    - OPENAI_API_KEY
 
 billing-service:
   image:
@@ -58,5 +47,3 @@ billing-service:
     tag: "latest"
   migrations:
     enabled: true
-  secrets:
-    - JWT_SECRET_KEY

@@ -28,8 +28,3 @@ spec:
           env:
             {{- toYaml .Values.env | nindent 12 }}
           {{- end }}
-          {{- if eq (include "fastapi-base.hasSecrets" .) "true" }}
-          envFrom:
-            - secretRef:
-                name: {{ include "fastapi-base.name" . }}-secrets
-          {{- end }}

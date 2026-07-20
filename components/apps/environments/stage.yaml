@@ -2,8 +2,6 @@ docs:
   enabled: true
 
 auth-service:
-  secrets:
-    - JWT_SECRET_KEY
   env:
     - name: DB_USER
       valueFrom:
@@ -23,11 +21,31 @@ auth-service:
       value: "auth"
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: jwt_secret_key
 
 transcription-service:
   env:
     - name: REDIS_HOST
       value: "infra-redis"
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: jwt_secret_key
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: openai_api_key
+    - name: ELEVENLABS_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: elevenlabs_api_key
 
 translation-service:
   env:
@@ -49,6 +67,16 @@ translation-service:
       value: "translation"
     - name: REDIS_HOST
       value: "infra-redis"
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: jwt_secret_key
+    - name: OPENAI_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: openai_api_key
 
 billing-service:
   env:
@@ -74,3 +102,8 @@ billing-service:
       value: "0" # TODO: real App Store Connect numeric app id
     - name: APPLE_ENVIRONMENT
       value: "Sandbox"
+    - name: JWT_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: jwt_secret_key

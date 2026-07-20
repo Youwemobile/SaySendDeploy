@@ -53,13 +53,12 @@ jobs:
         FULL_SHA="${{ github.event.client_payload.commit_sha }}"
         echo "SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
 
-    - name: Bump Chart and App Versions (Prod Only)
+    - name: Bump App Version (Prod Only)
       if: env.ENV_NAME == 'prod'
       run: |
         TAG="${{ github.event.client_payload.image_tag }}"
         APPS_CHART="./components/apps/Chart.yaml"
         yq -i ".appVersion = \"${TAG}\"" "${APPS_CHART}"
-        yq -i '.version = (.version | split(".") | .[-1] |= ((. | to_number) + 1 | to_string) | join("."))' "${APPS_CHART}"
 
     - name: Update Stage Dynamic Domain
       if: env.ENV_NAME == 'stage'

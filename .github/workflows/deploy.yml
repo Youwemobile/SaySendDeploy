@@ -1,80 +1,37 @@
 name: 'Deploy Platform Components'
 
 on:
-  repository_dispatch:
-    types: [deploy-services]
+  push:
+    branches:
+      - 'stage/**'
+    tags:
+      - '[0-9]*'
+  workflow_dispatch:
 
 concurrency:
-  group: deployment-${{ github.event.client_payload.is_prod == 'true' && 'prod' || github.event.client_payload.image_tag }}
+  group: deployment-${{ github.ref_type == 'tag' && 'prod' || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      TARGET_BRANCH: main
-      ENV_NAME: prod
-      NAMESPACE: saysend-prod
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.ref_type == 'branch' && startsWith(github.event.head_commit.message, '[deploy]'))
     steps:
     - name: Checkout infrastructure repo
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        ref: 'main'
 
-    - name: Prepare Stage Branch & Environment
-      if: github.event.client_payload.is_prod != 'true'
+    - name: Resolve environment
       run: |
-        GIT_REF="${{ github.event.client_payload.ref_name }}"
-        IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
-        echo "TARGET_BRANCH=${GIT_REF}" >> $GITHUB_ENV
-        echo "ENV_NAME=stage" >> $GITHUB_ENV
-        echo "NAMESPACE=saysend-${IMAGE_TAG}" >> $GITHUB_ENV
-        if git ls-remote --exit-code --heads origin "$GIT_REF"; then
-          git fetch origin "$GIT_REF":refs/remotes/origin/"$GIT_REF"
-          git checkout "$GIT_REF"
+        if [ "${{ github.ref_type }}" = "tag" ]; then
+          echo "ENV_NAME=prod" >> $GITHUB_ENV
+          echo "NAMESPACE=saysend-prod" >> $GITHUB_ENV
         else
-          git checkout -b "$GIT_REF"
+          IMAGE_TAG="$(echo '${{ github.ref_name }}' | sed 's/\//-/g')"
+          echo "ENV_NAME=stage" >> $GITHUB_ENV
+          echo "NAMESPACE=saysend-${IMAGE_TAG}" >> $GITHUB_ENV
         fi
-
-    - name: Install yq
-      uses: mikefarah/yq@v4.44.1
-
-    - name: Update Microservices Image Tags
-      run: |
-        TAG="${{ github.event.client_payload.image_tag }}"
-        yq -i "
-          .auth-service.image.tag = \"${TAG}\" |
-          .transcription-service.image.tag = \"${TAG}\" |
-          .translation-service.image.tag = \"${TAG}\" |
-          .billing-service.image.tag = \"${TAG}\"
-        " ./components/apps/values.yaml
-
-        FULL_SHA="${{ github.event.client_payload.commit_sha }}"
-        echo "SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
-
-    - name: Bump App Version (Prod Only)
-      if: env.ENV_NAME == 'prod'
-      run: |
-        TAG="${{ github.event.client_payload.image_tag }}"
-        APPS_CHART="./components/apps/Chart.yaml"
-        yq -i ".appVersion = \"${TAG}\"" "${APPS_CHART}"
-
-    - name: Update Stage Dynamic Domain
-      if: env.ENV_NAME == 'stage'
-      run: |
-        TARGET_DOMAIN="${{ env.NAMESPACE }}.k8s-dev.saysend.me"
-        yq -i ".ingress.host = \"${TARGET_DOMAIN}\"" ./components/infra/values.yaml
-
-    - name: Commit and Push changes
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Deploy ${{ github.event.client_payload.ref_name }}:${{ env.SHORT_SHA }} to ${{ env.NAMESPACE }}"
-        file_pattern: 'components/**/*.yaml'
-        branch: ${{ env.TARGET_BRANCH }}
-        create_branch: true
-        skip_dirty_check: true
-        commit_options: '--allow-empty'
 
     - name: Setup Kubernetes Environment
       uses: ./.github/actions/k8s-env-setup

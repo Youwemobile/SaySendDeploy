@@ -17,6 +17,15 @@ auth-service:
           key: db_password
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
+    - name: APPLE_AUDIENCES
+      value: '["net.liquidgears.saysend"]'
+    - name: GOOGLE_CLIENT_IDS
+      value: |-
+        [
+        "2229973251056-hug8usodqtmu6tbafarv13lbppccskk6.apps.googleusercontent.com",
+        "2229973251056-0t52oi7cr5o15f75pb393ne1opbloeno.apps.googleusercontent.com",
+        "2229973251056-3pq8pktqt8gcuu49e2jde8m65i98f9jm.apps.googleusercontent.com"
+        ]
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:
@@ -87,7 +96,7 @@ billing-service:
     - name: REDIS_HOST
       value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
     - name: APPLE_APP_APPLE_ID
-      value: "0" # TODO: real App Store Connect numeric app id
+      value: "6775735588"
     - name: APPLE_ENVIRONMENT
       value: "Production"
     - name: JWT_SECRET_KEY

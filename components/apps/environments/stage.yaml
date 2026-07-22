@@ -21,6 +21,17 @@ auth-service:
       value: "auth"
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
+    # TODO: required setting, no app default — trim to just
+    # "net.liquidgears.saysend" once callers stop sending the legacy audiences
+    - name: APPLE_AUDIENCES
+      value: '["net.liquidgears.saysend", "ss.saySend", "net.liquidgears.saysendMac"]'
+    - name: GOOGLE_CLIENT_IDS
+      value: >-
+        [
+        "2229973251056-hug8usodqtmu6tbafarv13lbppccskk6.apps.googleusercontent.com",
+        "2229973251056-0t52oi7cr5o15f75pb393ne1opbloeno.apps.googleusercontent.com",
+        "2229973251056-3pq8pktqt8gcuu49e2jde8m65i98f9jm.apps.googleusercontent.com"
+        ]
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:
@@ -99,7 +110,7 @@ billing-service:
     - name: REDIS_HOST
       value: "infra-redis"
     - name: APPLE_APP_APPLE_ID
-      value: "0" # TODO: real App Store Connect numeric app id
+      value: "6775735588"
     - name: APPLE_ENVIRONMENT
       value: "Sandbox"
     - name: JWT_SECRET_KEY

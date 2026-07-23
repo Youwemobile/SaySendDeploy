@@ -28,7 +28,7 @@ auth-service:
     - name: GOOGLE_CLIENT_IDS
       value: >-
         [
-        "2229973251056-hug8usodqtmu6tbafarv13lbppccskk6.apps.googleusercontent.com",
+        "229973251056-hug8usodqtmu6tbafarv13lbppccskk6.apps.googleusercontent.com",
         "2229973251056-0t52oi7cr5o15f75pb393ne1opbloeno.apps.googleusercontent.com",
         "2229973251056-3pq8pktqt8gcuu49e2jde8m65i98f9jm.apps.googleusercontent.com"
         ]

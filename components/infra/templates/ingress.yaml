@@ -2,6 +2,8 @@
 {{- $defaultBodySize := .Values.ingress.bodySize.default | quote }}
 {{- $transcriptionBodySize := .Values.ingress.bodySize.transcription | quote }}
 {{- $host := .Values.ingress.host | quote }}
+{{- $tlsEnabled := .Values.ingress.tls.enabled }}
+{{- $tlsSecretName := .Values.ingress.tls.secretName }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -10,6 +12,12 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
 spec:
+  {{- if $tlsEnabled }}
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: {{ $tlsSecretName }}
+  {{- end }}
   rules:
     - host: {{ $host }}
       http:
@@ -30,6 +38,12 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $transcriptionBodySize }}
 spec:
+  {{- if $tlsEnabled }}
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: {{ $tlsSecretName }}
+  {{- end }}
   rules:
     - host: {{ $host }}
       http:
@@ -50,6 +64,12 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
 spec:
+  {{- if $tlsEnabled }}
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: {{ $tlsSecretName }}
+  {{- end }}
   rules:
     - host: {{ $host }}
       http:
@@ -72,6 +92,12 @@ metadata:
     haproxy-ingress.github.io/config-backend: |
       http-request deny deny_status 404 if { path_beg /billing/v1/internal }
 spec:
+  {{- if $tlsEnabled }}
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: {{ $tlsSecretName }}
+  {{- end }}
   rules:
     - host: {{ $host }}
       http:
@@ -93,6 +119,12 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
 spec:
+  {{- if $tlsEnabled }}
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: {{ $tlsSecretName }}
+  {{- end }}
   rules:
     - host: {{ $host }}
       http:

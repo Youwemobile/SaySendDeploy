@@ -39,6 +39,16 @@ auth-service:
         secretKeyRef:
           name: saysend.stage
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_password
 
 transcription-service:
   env:
@@ -49,6 +59,16 @@ transcription-service:
         secretKeyRef:
           name: saysend.stage
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_password
     - name: OPENAI_API_KEY
       valueFrom:
         secretKeyRef:
@@ -85,6 +105,16 @@ translation-service:
         secretKeyRef:
           name: saysend.stage
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_password
     - name: OPENAI_API_KEY
       valueFrom:
         secretKeyRef:
@@ -120,3 +150,13 @@ billing-service:
         secretKeyRef:
           name: saysend.stage
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: admin_password

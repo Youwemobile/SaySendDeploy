@@ -33,6 +33,16 @@ auth-service:
         secretKeyRef:
           name: saysend.prod
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_password
 
 transcription-service:
   env:
@@ -43,6 +53,16 @@ transcription-service:
         secretKeyRef:
           name: saysend.prod
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_password
     - name: OPENAI_API_KEY
       valueFrom:
         secretKeyRef:
@@ -80,6 +100,16 @@ translation-service:
         secretKeyRef:
           name: saysend.prod
           key: openai_api_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_password
 
 billing-service:
   env:
@@ -106,3 +136,13 @@ billing-service:
         secretKeyRef:
           name: saysend.prod
           key: jwt_secret_key
+    - name: ADMIN_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_username
+    - name: ADMIN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: admin_password

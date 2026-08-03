@@ -32,7 +32,8 @@ auth-service:
         [
         "229973251056-hug8usodqtmu6tbafarv13lbppccskk6.apps.googleusercontent.com",
         "229973251056-0t52oi7cr5o15f75pb393ne1opbloeno.apps.googleusercontent.com",
-        "229973251056-3pq8pktqt8gcuu49e2jde8m65i98f9jm.apps.googleusercontent.com"
+        "229973251056-3pq8pktqt8gcuu49e2jde8m65i98f9jm.apps.googleusercontent.com",
+        "229973251056-1pagh7ob1bn5se85pr67a08vq43r51p4.apps.googleusercontent.com"
         ]
     - name: JWT_SECRET_KEY
       valueFrom:

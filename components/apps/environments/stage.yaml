@@ -25,8 +25,12 @@ auth-service:
     # "net.liquidgears.saysend" once callers stop sending the legacy audiences
     - name: APPLE_AUDIENCES
       value: '["net.liquidgears.saysend", "ss.saySend", "net.liquidgears.saysendMac"]'
-    - name: GOOGLE_AUDIENCE
-      value: "229973251056-1pagh7ob1bn5se85pr67a08vq43r51p4.apps.googleusercontent.com"
+    - name: GOOGLE_AUDIENCES
+      value: |-
+        [
+        "229973251056-1pagh7ob1bn5se85pr67a08vq43r51p4.apps.googleusercontent.com",
+        "229973251056-hug8usodqtmu6tbafarv13lbppccskk6.apps.googleusercontent.com"
+        ]
     - name: GOOGLE_AUTHORIZED_PARTIES
       value: |-
         [

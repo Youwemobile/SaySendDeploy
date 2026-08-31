@@ -56,6 +56,7 @@ jobs:
           --from-literal=elevenlabs_api_key="${{ secrets.STAGE_ELEVENLABS_API_KEY }}" \
           --from-literal=admin_username="${{ secrets.STAGE_ADMIN_USERNAME }}" \
           --from-literal=admin_password="${{ secrets.STAGE_ADMIN_PASSWORD }}" \
+          --from-literal=revenuecat_webhook_authorization="${{ secrets.STAGE_REVENUECAT_WEBHOOK_AUTHORIZATION }}" \
           --namespace ${{ env.NAMESPACE }} \
           --dry-run=client -o yaml | kubectl apply -f -
 

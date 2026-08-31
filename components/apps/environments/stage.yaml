@@ -165,3 +165,8 @@ billing-service:
         secretKeyRef:
           name: saysend.stage
           key: admin_password
+    - name: REVENUECAT_WEBHOOK_AUTHORIZATION
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: revenuecat_webhook_authorization

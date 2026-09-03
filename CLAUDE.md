@@ -28,10 +28,8 @@ Every secret-backed env var is wired via a plain `env` entry with `valueFrom.sec
 
 ### Environments and deployment flow
 
-Deployment is triggered externally via `repository_dispatch` (from an app repo's CI, not from pushes to this repo):
-
-- `.github/workflows/deploy.yml` — event `deploy-services`. `client_payload.is_prod == 'true'` selects **prod** (fixed namespace `saysend-prod`, branch `main`); otherwise it's a **stage** deploy to a dynamic namespace `saysend-<image_tag>` on a dynamically created/checked-out branch named after `client_payload.ref_name`. Phases: resolve env → update chart inputs → prepare cluster access (incl. `saysend.stage` Secret, stage only — see Secrets mechanism above) → deploy (`infra` on stage only, then `app`).
-- `.github/workflows/cleanup.yml` — event `delete-env`, only for refs starting with `stage/`. Uninstalls both Helm releases, deletes the namespace, and deletes the remote branch created for that stage environment.
+- `.github/workflows/deploy.yml` — triggers on push to a `stage/**` branch, push of a numeric tag (`[0-9]*`), or manual `workflow_dispatch`; the job runs only if the trigger was `workflow_dispatch` or a branch push whose head commit message starts with `[deploy]`. Env resolution: a tag ref selects **prod** (fixed namespace `saysend-prod`, `PROD_KUBECONFIG_DATA`); a branch ref selects **stage**, namespace `saysend-<ref_name with "/" replaced by "-">` (e.g. `stage/001` → `saysend-stage-001`), `STAGE_KUBECONFIG_DATA`. Phases: resolve env → `k8s-env-setup` (kubeconfig, namespace, `nexus-registry-key`) → (stage only) `helm upgrade --install infra` → (stage only) create/update the `saysend.stage` Secret (see Secrets mechanism above) → `helm dependency build` + `helm upgrade --install app` (both envs, with the matching `environments/<env>.yaml` overlay and `global.deployDate`) → `k8s-cleanup`.
+- `.github/workflows/cleanup.yml` — triggers on the repo's `delete` event, gated to `ref_type == 'branch' && startsWith(ref, 'stage/')` (i.e. deleting a `stage/**` branch fires it). Resolves the namespace the same way as deploy (`saysend-<branch with "/" replaced by "-">`), then `helm uninstall`s both `app` and `infra` releases and `kubectl delete namespace`s it.
 - `.github/actions/k8s-env-setup` — shared composite action: writes kubeconfig from a base64 secret, ensures the namespace exists, and (optionally) creates the `nexus-registry-key` imagePullSecret from a base64 docker config.
 - `.github/actions/k8s-cleanup` — removes the local `~/.kube` dir at the end of a job.
 

@@ -23,7 +23,7 @@ jobs:
     - name: Setup Kubernetes Environment
       uses: ./.github/actions/k8s-env-setup
       with:
-        kubeconfig_base64: ${{ secrets.KUBECONFIG_DATA_STAGE }}
+        kubeconfig_base64: ${{ secrets.STAGE_KUBECONFIG_DATA }}
         namespace: ${{ env.NAMESPACE }}
 
     - name: Purge Helm Releases and Namespace

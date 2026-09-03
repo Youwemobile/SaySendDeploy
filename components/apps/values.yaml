@@ -1,9 +1,7 @@
 global:
   deployDate: ""
-
 docs:
   enabled: false
-
 docs-service:
   image:
     repository: swaggerapi/swagger-ui
@@ -21,29 +19,25 @@ docs-service:
           {"url": "/translation/openapi.json","name": "Translation API"},
           {"url": "/billing/openapi.json","name": "Billing API"}
         ]
-
 auth-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/auth
-    tag: "latest"
+    tag: "stage-003"
   migrations:
     enabled: true
-
 transcription-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/transcription
-    tag: "latest"
-
+    tag: "stage-003"
 translation-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/translation
-    tag: "latest"
+    tag: "stage-003"
   migrations:
     enabled: true
-
 billing-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/billing
-    tag: "latest"
+    tag: "stage-003"
   migrations:
     enabled: true

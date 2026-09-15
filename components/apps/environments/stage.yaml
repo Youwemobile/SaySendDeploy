@@ -54,6 +54,18 @@ auth-service:
         secretKeyRef:
           name: saysend.stage
           key: admin_password
+    - name: DEVTODEV_APP_ID
+      value: "31022d14-e041-0e60-8020-dc713970fe09"
+    - name: APPSFLYER_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: saysend.stage
+          key: appsflyer_api_token
+    - name: APPSFLYER_PROPERTY_IDS
+      value: |-
+        {
+        "ios": "id6775735588"
+        }
 
 transcription-service:
   env:

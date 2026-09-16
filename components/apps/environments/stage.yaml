@@ -185,3 +185,5 @@ billing-service:
         secretKeyRef:
           name: saysend.stage
           key: revenuecat_api_key
+    - name: DEVTODEV_APP_ID
+      value: "31022d14-e041-0e60-8020-dc713970fe09"

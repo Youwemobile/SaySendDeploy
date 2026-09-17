@@ -91,6 +91,11 @@ transcription-service:
         secretKeyRef:
           name: saysend.prod
           key: elevenlabs_api_key
+    - name: SONIOX_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: soniox_api_key
 
 translation-service:
   env:

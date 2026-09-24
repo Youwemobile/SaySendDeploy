@@ -145,6 +145,8 @@ billing-service:
           key: db_password
     - name: REDIS_HOST
       value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+    - name: AUTH_SERVICE_URL
+      value: "http://auth-service"
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:

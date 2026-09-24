@@ -159,6 +159,8 @@ billing-service:
       value: "billing"
     - name: REDIS_HOST
       value: "infra-redis"
+    - name: AUTH_SERVICE_URL
+      value: "http://auth-service"
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:

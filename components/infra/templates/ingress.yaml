@@ -11,6 +11,8 @@ metadata:
   annotations:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
+    haproxy-ingress.github.io/config-backend: |
+      http-request deny deny_status 404 if { path_beg /auth/v1/internal }
 spec:
   {{- if $tlsEnabled }}
   tls:

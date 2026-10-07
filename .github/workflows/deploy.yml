@@ -52,6 +52,7 @@ jobs:
       run: |
         kubectl create secret generic saysend.stage \
           --from-literal=jwt_secret_key="${{ secrets.STAGE_JWT_SECRET_KEY }}" \
+          --from-literal=email_hmac_key="${{ secrets.STAGE_EMAIL_HMAC_KEY }}" \
           --from-literal=openai_api_key="${{ secrets.STAGE_OPENAI_API_KEY }}" \
           --from-literal=elevenlabs_api_key="${{ secrets.STAGE_ELEVENLABS_API_KEY }}" \
           --from-literal=admin_username="${{ secrets.STAGE_ADMIN_USERNAME }}" \

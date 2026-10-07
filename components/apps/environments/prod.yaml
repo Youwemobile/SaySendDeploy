@@ -39,6 +39,11 @@ auth-service:
         secretKeyRef:
           name: saysend.prod
           key: jwt_secret_key
+    - name: EMAIL_HMAC_KEY
+      valueFrom:
+        secretKeyRef:
+          name: saysend.prod
+          key: email_hmac_key
     - name: ADMIN_USERNAME
       valueFrom:
         secretKeyRef:

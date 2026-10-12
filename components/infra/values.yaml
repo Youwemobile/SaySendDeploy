@@ -1,16 +1,15 @@
 ingress:
   annotations:
-     kubernetes.io/ingress.class: "haproxy"
-     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  host: ""
+    kubernetes.io/ingress.class: "haproxy"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  host: "saysend-stage-003.k8s-dev.saysend.me"
   enableDocs: true
   tls:
     enabled: true
     secretName: saysend-tls
   bodySize:
-    default: "512k"        # 0.5 MB - general cap for POST/PUT/PATCH endpoints
+    default: "512k" # 0.5 MB - general cap for POST/PUT/PATCH endpoints
     transcription: "1536k" # 1.5 MB - /transcription/v1/transcribe audio upload
-
 postgres:
   volumeSize: 1Gi
   instances: 1
@@ -21,7 +20,6 @@ postgres:
     limits:
       cpu: 1000m
       memory: 2000Mi
-
 redis:
   image: quay.io/opstree/redis:v7.4.8
   volumeSize: 256Mi

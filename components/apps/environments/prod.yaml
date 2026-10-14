@@ -4,17 +4,25 @@ docs:
 auth-service:
   env:
     - name: DB_HOST
-      value: "prod-db-cluster.internal"
+      valueFrom:
+        secretKeyRef:
+          name: saysend-db
+          key: host
+    - name: DB_PORT
+      valueFrom:
+        secretKeyRef:
+          name: saysend-db
+          key: port
     - name: DB_USER
       valueFrom:
         secretKeyRef:
-          name: saysend.prod
-          key: db_username
+          name: saysend-db
+          key: username
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: saysend.prod
-          key: db_password
+          name: saysend-db
+          key: password
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
     - name: APPLE_AUDIENCES
@@ -71,7 +79,7 @@ auth-service:
 transcription-service:
   env:
     - name: REDIS_HOST
-      value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+      value: "infra-redis"
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:
@@ -101,19 +109,27 @@ transcription-service:
 translation-service:
   env:
     - name: DB_HOST
-      value: "prod-db-cluster.internal"
+      valueFrom:
+        secretKeyRef:
+          name: saysend-db
+          key: host
+    - name: DB_PORT
+      valueFrom:
+        secretKeyRef:
+          name: saysend-db
+          key: port
     - name: DB_USER
       valueFrom:
         secretKeyRef:
-          name: saysend.prod
-          key: db_username
+          name: saysend-db
+          key: username
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: saysend.prod
-          key: db_password
+          name: saysend-db
+          key: password
     - name: REDIS_HOST
-      value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+      value: "infra-redis"
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:
@@ -138,19 +154,27 @@ translation-service:
 billing-service:
   env:
     - name: DB_HOST
-      value: "prod-db-cluster.internal"
+      valueFrom:
+        secretKeyRef:
+          name: saysend-db
+          key: host
+    - name: DB_PORT
+      valueFrom:
+        secretKeyRef:
+          name: saysend-db
+          key: port
     - name: DB_USER
       valueFrom:
         secretKeyRef:
-          name: saysend.prod
-          key: db_username
+          name: saysend-db
+          key: username
     - name: DB_PASSWORD
       valueFrom:
         secretKeyRef:
-          name: saysend.prod
-          key: db_password
+          name: saysend-db
+          key: password
     - name: REDIS_HOST
-      value: "prod-redis-cluster.internal" # TODO: confirm real prod Redis host
+      value: "infra-redis"
     - name: AUTH_SERVICE_URL
       value: "http://auth-service"
     - name: JWT_SECRET_KEY

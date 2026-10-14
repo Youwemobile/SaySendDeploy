@@ -41,11 +41,18 @@ jobs:
         nexus_docker_config_base64: ${{ secrets.NEXUS_DOCKER_CONFIG }}
 
     - name: Deploy Infrastructure
-      if: env.ENV_NAME == 'stage'
       run: |
         helm upgrade --install infra ./components/infra \
           -f ./components/infra/values.yaml \
-          --namespace ${{ env.NAMESPACE }} --create-namespace
+          -f ./components/infra/environments/${{ env.ENV_NAME }}.yaml \
+          --namespace ${{ env.NAMESPACE }}
+
+    - name: Deploy Stage Infrastructure
+      if: env.ENV_NAME == 'stage'
+      run: |
+        helm upgrade --install stage-infra ./components/stage-infra \
+          -f ./components/stage-infra/values.yaml \
+          --namespace ${{ env.NAMESPACE }}
 
     - name: Create Stage Application Secrets
       if: env.ENV_NAME == 'stage'
@@ -71,7 +78,7 @@ jobs:
           -f ./components/apps/values.yaml \
           -f ./components/apps/environments/${{ env.ENV_NAME }}.yaml \
           --set "global.deployDate=${CURRENT_DATE}" \
-          --namespace ${{ env.NAMESPACE }} --create-namespace
+          --namespace ${{ env.NAMESPACE }}
 
     - name: Cleanup Kubeconfig
       if: always()

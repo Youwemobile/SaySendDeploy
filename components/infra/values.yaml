@@ -11,17 +11,6 @@ ingress:
     default: "512k"        # 0.5 MB - general cap for POST/PUT/PATCH endpoints
     transcription: "1536k" # 1.5 MB - /transcription/v1/transcribe audio upload
 
-postgres:
-  volumeSize: 1Gi
-  instances: 1
-  resources:
-    requests:
-      cpu: 200m
-      memory: 500Mi
-    limits:
-      cpu: 1000m
-      memory: 2000Mi
-
 redis:
   image: quay.io/opstree/redis:v7.4.8
   volumeSize: 256Mi

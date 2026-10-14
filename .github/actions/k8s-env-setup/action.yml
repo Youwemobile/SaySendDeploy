@@ -1,15 +1,17 @@
 name: 'Kubernetes Environment Setup'
 description: >
-  Prepares Kubernetes environment by configuring kubeconfig and creating Nexus
-  registry secrets
+  Prepares Kubernetes environment by configuring kubeconfig and, when a
+  namespace is given, ensuring it exists and creating Nexus registry secrets
 inputs:
   kubeconfig_base64:
     description: 'Base64 encoded kubeconfig data'
     required: true
   namespace:
-    description: 'Target namespace for registry secret'
+    description: >
+      Target namespace to ensure and create the registry secret in; omit to
+      only configure kubeconfig
     required: false
-    default: 'default'
+    default: ''
   nexus_docker_config_base64:
     description: 'Base64 encoded docker config json'
     required: false
@@ -24,13 +26,16 @@ runs:
         echo "${{ inputs.kubeconfig_base64 }}" | base64 -d > ~/.kube/config
         chmod 600 ~/.kube/config
 
+    # Only get + create: on prod the namespace is pre-created by Terraform and
+    # ci-deployer may only get it, so `kubectl apply` (which patches) fails.
     - name: Create Namespace
+      if: ${{ inputs.namespace != '' }}
       shell: bash
       run: |
-        kubectl create namespace ${{ inputs.namespace }} --dry-run=client -o yaml | kubectl apply -f -
+        kubectl get namespace "${{ inputs.namespace }}" >/dev/null 2>&1 || kubectl create namespace "${{ inputs.namespace }}"
 
     - name: Create Registry Secret
-      if: ${{ inputs.nexus_docker_config_base64 != '' }}
+      if: ${{ inputs.namespace != '' && inputs.nexus_docker_config_base64 != '' }}
       shell: bash
       run: |
         echo -n "${{ inputs.nexus_docker_config_base64 }}" | base64 -d > ./docker-config.json

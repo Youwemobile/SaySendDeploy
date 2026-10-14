@@ -24,14 +24,12 @@ jobs:
       uses: ./.github/actions/k8s-env-setup
       with:
         kubeconfig_base64: ${{ secrets.STAGE_KUBECONFIG_DATA }}
-        namespace: ${{ env.NAMESPACE }}
 
-    - name: Purge Helm Releases and Namespace
+    # Helm releases are stored as Secrets in the namespace, so deleting it
+    # removes them along with everything they deployed.
+    - name: Delete Namespace
       run: |
-        NS="${{ env.NAMESPACE }}"
-        helm uninstall app -n ${NS} || true
-        helm uninstall infra -n ${NS} || true
-        kubectl delete namespace ${NS} --wait=true || true
+        kubectl delete namespace "${{ env.NAMESPACE }}" --wait=true --ignore-not-found
 
     - name: Cleanup Kubeconfig
       if: always()

@@ -1,7 +1,12 @@
+# Prod release version: the image tag for every service below (`tag: *release`)
+releaseVersion: &release "1.0.0"
+
 docs:
   enabled: false
 
 auth-service:
+  image:
+    tag: *release
   env:
     - name: DB_HOST
       valueFrom:
@@ -77,6 +82,8 @@ auth-service:
         }
 
 transcription-service:
+  image:
+    tag: *release
   env:
     - name: REDIS_HOST
       value: "infra-redis"
@@ -107,6 +114,8 @@ transcription-service:
           key: elevenlabs_api_key
 
 translation-service:
+  image:
+    tag: *release
   env:
     - name: DB_HOST
       valueFrom:
@@ -152,6 +161,8 @@ translation-service:
           key: admin_password
 
 billing-service:
+  image:
+    tag: *release
   env:
     - name: DB_HOST
       valueFrom:

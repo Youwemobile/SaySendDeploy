@@ -10,7 +10,7 @@ This is the infrastructure/deployment repo for SaySend (separate from the applic
 
 Two Helm chart trees: reusable charts in `charts/`, and one umbrella chart per Helm release in `components/`, pulling the reusable ones in as `file://` dependencies:
 
-- **`charts/fastapi-base/`** — a reusable base chart (`type: application`) modeling a single generic FastAPI microservice: one Deployment + one Service on port 8000, and an optional pre-install/pre-upgrade migration Job (`alembic upgrade head`, gated by `migrations.enabled`).
+- **`charts/fastapi-base/`** — a reusable base chart (`type: application`) modeling a single generic FastAPI microservice: one Deployment + one Service on port 8000 (readiness/liveness probes on the services' `GET /health`, so the image must serve it), and an optional pre-install/pre-upgrade migration Job (`alembic upgrade head`, gated by `migrations.enabled`).
 - **`charts/postgres/`** — a Postgres cluster as a Zalando `postgresql` operator CR (`acid.zalan.do/v1`), fixed name `infra-pg`.
 - **`charts/docs/`** — Swagger UI (`swaggerapi/swagger-ui`, port 8080) over the services' `openapi.json`, with its own `Ingress` on `/docs`. Cluster-specific Ingress settings (host, TLS secret, annotations) have no chart defaults and come from the umbrella chart.
 - **`components/apps/`** — the umbrella chart that instantiates `fastapi-base` several times as subchart dependencies via aliasing (one per microservice, see `components/apps/Chart.yaml`), each with its own `image` and `env` overrides in `components/apps/values.yaml`. Because Helm dependency aliases are used, per-service config in values files is keyed by the alias name (e.g. `auth-service:`), not `fastapi-base:`.

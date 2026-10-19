@@ -1,10 +1,12 @@
 # Prod release version: the image tag for every service below (`tag: *release`)
-releaseVersion: &release "1.0.0"
+releaseVersion: &release "1.1.0"
 
 auth-service:
   image:
     tag: *release
   env:
+    - name: DOCS_ENABLED
+      value: "false"
     - name: DB_HOST
       valueFrom:
         secretKeyRef:
@@ -82,6 +84,8 @@ transcription-service:
   image:
     tag: *release
   env:
+    - name: DOCS_ENABLED
+      value: "false"
     - name: REDIS_HOST
       value: "infra-redis"
     - name: JWT_SECRET_KEY
@@ -114,6 +118,8 @@ translation-service:
   image:
     tag: *release
   env:
+    - name: DOCS_ENABLED
+      value: "false"
     - name: DB_HOST
       valueFrom:
         secretKeyRef:
@@ -161,6 +167,8 @@ billing-service:
   image:
     tag: *release
   env:
+    - name: DOCS_ENABLED
+      value: "false"
     - name: DB_HOST
       valueFrom:
         secretKeyRef:

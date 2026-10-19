@@ -24,6 +24,19 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.service.targetPort | default 8000 }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.targetPort | default 8000 }}
+            periodSeconds: 10
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.targetPort | default 8000 }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 2
           {{- if .Values.env }}
           env:
             {{- toYaml .Values.env | nindent 12 }}

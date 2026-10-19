@@ -1,0 +1,13 @@
+image: swaggerapi/swagger-ui:v5.17.14
+
+urls:
+  - {url: /auth/openapi.json, name: Auth API}
+  - {url: /transcription/openapi.json, name: Transcription API}
+  - {url: /translation/openapi.json, name: Translation API}
+  - {url: /billing/openapi.json, name: Billing API}
+
+ingress:
+  annotations: {}
+  host: ""
+  tls:
+    secretName: ""

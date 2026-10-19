@@ -3,7 +3,6 @@ ingress:
      kubernetes.io/ingress.class: "haproxy"
      cert-manager.io/cluster-issuer: "letsencrypt-prod"
   host: ""
-  enableDocs: true
   tls:
     enabled: true
     secretName: saysend-tls

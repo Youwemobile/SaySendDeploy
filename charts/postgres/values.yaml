@@ -1,0 +1,3 @@
+volumeSize: 1Gi
+instances: 1
+resources: {}

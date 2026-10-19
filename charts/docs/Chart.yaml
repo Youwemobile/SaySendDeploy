@@ -1,0 +1,5 @@
+apiVersion: v2
+name: docs
+description: Swagger UI over the services' OpenAPI schemas
+type: application
+version: 0.1.0

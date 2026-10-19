@@ -1,0 +1,3 @@
+# helm dependency build output
+components/*/charts/
+components/*/Chart.lock

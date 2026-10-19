@@ -1,6 +1,3 @@
-docs:
-  enabled: true
-
 auth-service:
   env:
     - name: DB_USER

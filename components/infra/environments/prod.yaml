@@ -1,3 +1,2 @@
 ingress:
   host: api.saysend.me
-  enableDocs: false

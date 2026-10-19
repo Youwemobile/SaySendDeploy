@@ -1,5 +1,13 @@
 apiVersion: v2
 name: stage-infra
-description: Stage infra (Zalando Postgres)
+description: Stage infra (Zalando Postgres, API docs)
 type: application
-version: 1.0.0
+version: 1.1.0
+
+dependencies:
+  - name: postgres
+    version: 0.1.0
+    repository: "file://../../charts/postgres"
+  - name: docs
+    version: 0.1.0
+    repository: "file://../../charts/docs"

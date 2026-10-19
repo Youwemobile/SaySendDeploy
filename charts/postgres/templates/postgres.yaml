@@ -12,8 +12,8 @@ metadata:
 spec:
   teamId: "dev"
   volume:
-    size: {{ .Values.postgres.volumeSize | default "1Gi" }}
-  numberOfInstances: {{ .Values.postgres.instances | default 1 }}
+    size: {{ .Values.volumeSize }}
+  numberOfInstances: {{ .Values.instances }}
   users:
     saysend:
     - superuser
@@ -29,7 +29,7 @@ spec:
   postgresql:
     version: "17"
   resources:
-    {{- toYaml .Values.postgres.resources | nindent 4 }}
+    {{- toYaml .Values.resources | nindent 4 }}
   patroni:
     initdb:
       encoding: "UTF8"

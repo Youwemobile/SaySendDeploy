@@ -52,6 +52,7 @@ jobs:
     - name: Deploy Stage Infrastructure
       if: env.ENV_NAME == 'stage'
       run: |
+        helm dependency build ./components/stage-infra
         helm upgrade --install stage-infra ./components/stage-infra \
           -f ./components/stage-infra/values.yaml \
           --namespace ${{ env.NAMESPACE }}

@@ -1,9 +1,6 @@
 # Prod release version: the image tag for every service below (`tag: *release`)
 releaseVersion: &release "1.0.0"
 
-docs:
-  enabled: false
-
 auth-service:
   image:
     tag: *release

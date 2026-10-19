@@ -1,27 +1,6 @@
 global:
   deployDate: ""
 
-docs:
-  enabled: false
-
-docs-service:
-  image:
-    repository: swaggerapi/swagger-ui
-    tag: "v5.17.14"
-  service:
-    targetPort: 8080
-  env:
-    - name: BASE_URL
-      value: "/docs"
-    - name: URLS
-      value: |-
-        [
-          {"url": "/auth/openapi.json","name":"Auth API"},
-          {"url": "/transcription/openapi.json","name": "Transcription API"},
-          {"url": "/translation/openapi.json","name": "Translation API"},
-          {"url": "/billing/openapi.json","name": "Billing API"}
-        ]
-
 auth-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/auth

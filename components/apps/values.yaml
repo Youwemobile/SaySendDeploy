@@ -1,28 +1,24 @@
 global:
   deployDate: ""
-
 auth-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/auth
-    tag: "latest"
+    tag: "stage-004"
   migrations:
     enabled: true
-
 transcription-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/transcription
-    tag: "latest"
-
+    tag: "stage-004"
 translation-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/translation
-    tag: "latest"
+    tag: "stage-004"
   migrations:
     enabled: true
-
 billing-service:
   image:
     repository: docker-registry.lifeulike.net/saysend/billing
-    tag: "latest"
+    tag: "stage-004"
   migrations:
     enabled: true

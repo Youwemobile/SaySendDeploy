@@ -8,12 +8,11 @@ postgres:
     limits:
       cpu: 1000m
       memory: 2000Mi
-
 docs:
   ingress:
     annotations:
       kubernetes.io/ingress.class: "haproxy"
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    host: "" # set by the source repo's CI
+    host: "saysend-stage-004.k8s-dev.saysend.me" # set by the source repo's CI
     tls:
       secretName: saysend-tls

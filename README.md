@@ -16,6 +16,28 @@ Stage has no manual run: `workflow_dispatch` from a branch is skipped, because o
 
 **Tear down:** delete the `stage/NNN` branch in this repo. `cleanup.yml` deletes the namespace, and the Helm releases and stage Postgres go with it.
 
+### Reference data
+
+A new stage's DB only has the defaults the migrations insert. To load prod's reference tables (`translation`: `language`, `tone`, `prompt_template`; `auth`: `document_version`), after the stage's first deploy run Actions → **Seed Stage Databases** → **Run workflow** from the `stage/NNN` branch. With your own kubeconfig you can run the same script directly:
+
+```bash
+scripts/seed-stage.sh saysend-stage-NNN
+```
+
+It replaces those tables with `seeds/<db>.sql` (one file per DB, named after it) and restarts translation-service, which reads them only at startup. A rerun throws away any manual edits of those tables on that stage. The seeds come from the branch you run it on, which starts from `main`.
+
+To refresh the dumps from prod (e.g. after the tables were edited there):
+
+```bash
+echo 'TRUNCATE public.language, public.prompt_template, public.tone;' > seeds/translation.sql
+pg_dump --data-only --column-inserts -t language -t tone -t prompt_template -d translation >> seeds/translation.sql
+
+echo 'TRUNCATE public.document_version;' > seeds/auth.sql
+pg_dump --data-only --column-inserts -t document_version -d auth >> seeds/auth.sql
+```
+
+A new table goes into both the `TRUNCATE` and the `-t` list; a new DB is a new file.
+
 ## Prod
 
 Namespace `saysend-prod`, at `https://api.saysend.me`. A prod deploy only runs when someone starts it by hand from a semver tag (`1.0.0`).

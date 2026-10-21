@@ -2,4 +2,4 @@ apiVersion: v2
 name: postgres
 description: Zalando Postgres cluster (postgresql operator CR)
 type: application
-version: 0.1.0
+version: 0.1.1

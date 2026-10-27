@@ -19,6 +19,9 @@ translation-service:
     tag: "latest"
   migrations:
     enabled: true
+  # Admin writes ask every pod to reload its settings cache (SETTINGS_PEERS_HOST).
+  headlessService:
+    enabled: true
 
 billing-service:
   image:

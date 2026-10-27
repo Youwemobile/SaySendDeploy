@@ -1,0 +1,16 @@
+{{- if gt (int .Values.replicaCount) 1 }}
+# Node drains (e.g. GKE node upgrades) evict one replica at a time, waiting for
+# its replacement to become ready elsewhere. Skipped for a single replica, where
+# it would block the drain outright.
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "fastapi-base.name" . }}
+spec:
+  maxUnavailable: 1
+  # An unhealthy pod serves nothing anyway; don't let it block a drain.
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      app: {{ include "fastapi-base.name" . }}
+{{- end }}

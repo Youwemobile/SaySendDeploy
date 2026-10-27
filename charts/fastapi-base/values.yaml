@@ -7,6 +7,12 @@ image:
 service:
   targetPort: 8000
 
+headlessService:
+  enabled: false
+
+# 0 disables the preStop hook
+preStopSleepSeconds: 5
+
 env: []
 
 migrations:

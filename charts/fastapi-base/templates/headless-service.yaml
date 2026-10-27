@@ -1,0 +1,16 @@
+{{- if .Values.headlessService.enabled }}
+# Resolves to every pod's IP (not one virtual IP), so a pod can reach all its
+# peers. Not-ready pods are included so a pod still starting is reached too.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fastapi-base.name" . }}-headless
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - port: {{ .Values.service.targetPort | default 8000 }}
+      targetPort: {{ .Values.service.targetPort | default 8000 }}
+  selector:
+    app: {{ include "fastapi-base.name" . }}
+{{- end }}

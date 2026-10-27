@@ -12,7 +12,7 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
     haproxy-ingress.github.io/config-backend: |
-      http-request deny deny_status 404 if { path_beg /auth/v1/internal }
+      http-request deny deny_status 404 if { path,url_dec -m beg /auth/v1/internal } || !{ path,url_dec -m found }
 spec:
   {{- if $tlsEnabled }}
   tls:
@@ -65,6 +65,8 @@ metadata:
   annotations:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
+    haproxy-ingress.github.io/config-backend: |
+      http-request deny deny_status 404 if { path,url_dec -m beg /translation/v1/internal } || !{ path,url_dec -m found }
 spec:
   {{- if $tlsEnabled }}
   tls:
@@ -92,7 +94,7 @@ metadata:
     {{- toYaml $annotations | nindent 4 }}
     haproxy-ingress.github.io/proxy-body-size: {{ $defaultBodySize }}
     haproxy-ingress.github.io/config-backend: |
-      http-request deny deny_status 404 if { path_beg /billing/v1/internal }
+      http-request deny deny_status 404 if { path,url_dec -m beg /billing/v1/internal } || !{ path,url_dec -m found }
 spec:
   {{- if $tlsEnabled }}
   tls:

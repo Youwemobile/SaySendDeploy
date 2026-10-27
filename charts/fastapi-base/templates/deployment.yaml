@@ -37,6 +37,15 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 20
             timeoutSeconds: 2
+          {{- if .Values.preStopSleepSeconds }}
+          # Delays SIGTERM until the Ingress and kube-proxy stop routing to the
+          # pod; they drop it only seconds after deletion starts, and uvicorn
+          # closes its listener on SIGTERM right away.
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "{{ .Values.preStopSleepSeconds }}"]
+          {{- end }}
           {{- if .Values.env }}
           env:
             {{- toYaml .Values.env | nindent 12 }}

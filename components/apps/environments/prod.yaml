@@ -1,7 +1,8 @@
 # Prod release version: the image tag for every service below (`tag: *release`)
-releaseVersion: &release "1.1.0"
+releaseVersion: &release "1.2.0"
 
 auth-service:
+  replicaCount: 2
   image:
     tag: *release
   env:
@@ -29,6 +30,8 @@ auth-service:
           key: password
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
+    - name: REDIS_HOST
+      value: "infra-redis"
     - name: APPLE_AUDIENCES
       value: '["net.liquidgears.saysend"]'
     - name: GOOGLE_AUDIENCES
@@ -81,6 +84,7 @@ auth-service:
         }
 
 transcription-service:
+  replicaCount: 2
   image:
     tag: *release
   env:
@@ -115,6 +119,7 @@ transcription-service:
           key: elevenlabs_api_key
 
 translation-service:
+  replicaCount: 2
   image:
     tag: *release
   env:
@@ -142,6 +147,8 @@ translation-service:
           key: password
     - name: REDIS_HOST
       value: "infra-redis"
+    - name: SETTINGS_PEERS_HOST
+      value: "translation-service-headless"
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:
@@ -164,6 +171,7 @@ translation-service:
           key: admin_password
 
 billing-service:
+  replicaCount: 2
   image:
     tag: *release
   env:

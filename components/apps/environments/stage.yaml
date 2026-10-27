@@ -18,6 +18,8 @@ auth-service:
       value: "auth"
     - name: BILLING_SERVICE_URL
       value: "http://billing-service"
+    - name: REDIS_HOST
+      value: "infra-redis"
     # TODO: required setting, no app default — trim to just
     # "net.liquidgears.saysend" once callers stop sending the legacy audiences
     - name: APPLE_AUDIENCES
@@ -121,6 +123,8 @@ translation-service:
       value: "translation"
     - name: REDIS_HOST
       value: "infra-redis"
+    - name: SETTINGS_PEERS_HOST
+      value: "translation-service-headless"
     - name: JWT_SECRET_KEY
       valueFrom:
         secretKeyRef:

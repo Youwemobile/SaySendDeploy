@@ -73,7 +73,7 @@ What gets deployed is whatever the tagged commit contains, in both repos. Branch
 
 Run the workflow on an older tag (step 4 with, e.g., `1.0.0`). It redeploys that tag's charts and image versions. Then open a revert PR so `main` matches prod again; otherwise the next release ships from the broken state.
 
-DB migrations (`alembic upgrade head`) are not rolled back. If the bad release changed the schema, the old code meets the new schema. Write migrations to stay backward compatible: add a column in one release, drop the old one in a later release.
+DB migrations (`alembic upgrade heads`) are not rolled back. If the bad release changed the schema, the old code meets the new schema. Write migrations to stay backward compatible: add a column in one release, drop the old one in a later release.
 
 ### Rules
 

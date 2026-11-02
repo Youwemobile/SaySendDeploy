@@ -24,7 +24,7 @@ spec:
         - name: migrate
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
-          command: ["alembic", "upgrade", "head"]
+          command: ["alembic", "upgrade", "heads"]
           {{- if .Values.env }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
